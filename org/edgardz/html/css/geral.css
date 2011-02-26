@@ -1,0 +1,27 @@
+*{
+	border:0;
+	margin:0;
+	padding:0;
+}
+html{
+	height: 100%;
+	overflow: auto;
+}
+#conteudoFlash {
+	/* firefox */
+	min-height: 600px;
+	min-width: 900px;
+	height: 100%;
+	width: 100%;
+	
+	/* internet explorer */
+	height: expression( Math.max( document.body.clientHeight, 600 ) + "px" );
+	width:  expression( Math.max( document.body.clientWidth,  900 ) + "px" );
+}
+body {
+	height: 100%;
+	width:100%;
+	margin: 0;
+	padding: 0;
+	background-color: #ffffff;
+}
