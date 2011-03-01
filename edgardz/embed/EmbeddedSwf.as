@@ -2,6 +2,7 @@ package org.edgardz.embed
 {
 	import flash.display.Loader;
 	import flash.display.MovieClip;
+	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
 	import flash.system.ApplicationDomain;
 	import flash.system.LoaderContext;
@@ -25,6 +26,7 @@ package org.edgardz.embed
 		private var _swf			:MovieClip;
 		private var _isLoaded		:Boolean;
 		private var onComplete		:Function;
+		private var SwfClass		:Class;
 		
 		public var postLoadAction	:Function;
 		
@@ -39,13 +41,16 @@ package org.edgardz.embed
 		public function embed(SwfClass:Class, onCompleteAction:Function = null, addAsChild:Boolean = true):void
 		{
 			okToAdd = addAsChild;
+			
+			this.SwfClass = SwfClass;
+			
 			bytes = (new SwfClass() as ByteArray);
 			
 			onComplete = onCompleteAction;
 			
 			loader = new Loader();
-			loader.loadBytes(bytes, new LoaderContext(false,ApplicationDomain.currentDomain) );
-			//loader.loadBytes(bytes);
+			//loader.loadBytes(bytes, new LoaderContext(false,ApplicationDomain.currentDomain) );
+			loader.loadBytes(bytes);
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onLoadComplete, false, 0, true);
 		}
 		
@@ -62,9 +67,19 @@ package org.edgardz.embed
 			}
 		}
 		
+		public function set swf(value:MovieClip):void
+		{
+			_swf = value;
+		}
+		
 		public function get loaded():Boolean
 		{
 			return _isLoaded;
+		}
+		
+		public function set loaded(value:Boolean):void
+		{
+			_isLoaded = value;
 		}
 		
 		private function onLoadComplete(e:Event):void
@@ -85,19 +100,21 @@ package org.edgardz.embed
 			if(postLoadAction != null) postLoadAction();
 		}
 		
-		public function getLibraryClass(className:String):Class
+		public function getClassFromSwf(linkage:String):Class
 		{
-			try
+			try 
 			{
-				return loader.contentLoaderInfo.applicationDomain.getDefinition(className) as Class;
+				return loader.contentLoaderInfo.applicationDomain.getDefinition(linkage) as Class;
 			}
-			catch(e:Error)
+			catch(e:Error) 
 			{
-				throw new Error( className +" definition not found!");
-			}
+				throw new IllegalOperationError(linkage + " definition not found in " + SwfClass); 
+			} 
 			
 			return null;
 		}
+		
+		
 
 	}
 }

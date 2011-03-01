@@ -2,7 +2,6 @@ package org.edgardz.loaders
 {
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
-	import flash.events.SecurityErrorEvent;
 	import flash.net.URLLoader;
 	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
@@ -11,18 +10,14 @@ package org.edgardz.loaders
 
 	public class DataLoader
 	{
-		public static function get( url:String, onComplete:Function, onError:Function = null):void
+		public static function load( url:String, onComplete:Function, onError:Function = null):void
 		{
 			var loader 	:URLLoader 	= new URLLoader();
 			var request	:URLRequest = new URLRequest(url);
 			
 			loader.addEventListener(Event.COMPLETE, onComplete, false, 0, true);
 			
-			if( onError != null ) 
-			{
-				loader.addEventListener(IOErrorEvent.IO_ERROR, onError, false, 0, true);
-				loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onError, false, 0, true);
-			}
+			if( onError != null ) loader.addEventListener(IOErrorEvent.IO_ERROR, onError, false, 0, true);
 			
 			try 
 			{
@@ -59,7 +54,7 @@ package org.edgardz.loaders
 			}
 			catch (e:SecurityError)
 			{
-				trace("DataLoader.as:", e);
+				trace("DataLoader:", e);
 			}
 		}
 

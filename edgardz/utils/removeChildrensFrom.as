@@ -2,8 +2,8 @@ package org.edgardz.utils
 {
 	import flash.display.DisplayObjectContainer;
 
-	public function removeChildrensFrom( obj:DisplayObjectContainer ):void
+	public function removeChildrensFrom( container:DisplayObjectContainer ):void
 	{
-		while( obj.numChildren ) obj.removeChildAt(0);
+		while( container.numChildren ) container.removeChildAt(0);
 	}
 }
